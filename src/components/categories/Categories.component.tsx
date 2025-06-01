@@ -11,8 +11,7 @@ import { JSX } from "react";
             {categories.map(category => (
                 <CategoryItem key={category._id} {...category} />
             ))}
-            
+            <div></div>
         </div>
     )
 }
-    
