@@ -4,10 +4,12 @@ import {getAuth,
         signInWithPopup,
         GoogleAuthProvider,
         User,
-        UserCredential
+        UserCredential,
+        Auth,
+        createUserWithEmailAndPassword
  } from 'firebase/auth';
 
- import {getFirestore,doc,getDoc,setDoc} from 'firebase/firestore'
+ import {getFirestore,doc,getDoc,setDoc, DocumentReference, DocumentData} from 'firebase/firestore'
 import { aw } from 'react-router/dist/development/register-BkDIKxVz';
 
 const firebaseConfig = {
@@ -22,19 +24,19 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt:"select_account"
 })
 
 export const auth = getAuth();
-export const signInWithGooglePopup = (): Promise<UserCredential> => signInWithPopup(auth,provider)
-
+export const signInWithGooglePopup = (): Promise<UserCredential> => signInWithPopup(auth,googleProvider)
+export const signInWithGoogleRedirect = (): Promise<UserCredential> => signInWithRedirect(auth,googleProvider);
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth: User) =>{
+export const createUserDocumentFromAuth = async (userAuth: User,additionalInfo={}):Promise<DocumentReference<DocumentData, DocumentData>> =>{
   const userDocRef = doc(db,'users',userAuth.uid)
   
   const userSnapshot = await getDoc(userDocRef)
@@ -46,7 +48,8 @@ export const createUserDocumentFromAuth = async (userAuth: User) =>{
       await setDoc(userDocRef, {
           displayName ,
           email,
-          createdAt
+          createdAt,
+          ...additionalInfo
       })
     } catch (error: unknown) {
 
@@ -58,4 +61,46 @@ export const createUserDocumentFromAuth = async (userAuth: User) =>{
     }
   }
   return userDocRef;
+}
+
+interface IUserAuth{
+  email: string;
+  password: string;
+}
+
+interface IAuthResult{
+  user?: User;
+  error?: {
+    code: string;
+    message: string
+  }
+}
+export const createAuthUserWithEmailAndPassword = async ({email, password}: IUserAuth):Promise<IAuthResult> =>{
+  if(!email || !password) return {
+      error: {
+        code: "auth/invalid-input",
+        message: "Email and password must be provided.",
+      },
+    };
+
+    try {
+      const { user }  = await createUserWithEmailAndPassword(auth ,email, password )
+      return { user };
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+          return{
+            error: {
+              code: error.code,
+              message: error.message
+            }
+          }
+      }
+    }
+    return {
+      error: {
+        code: "auth/unknown-error",
+        message: "An unknown error occurred.",
+      },
+    };
+   
 }
