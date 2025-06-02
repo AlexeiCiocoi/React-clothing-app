@@ -5,12 +5,12 @@ import {getAuth,
         GoogleAuthProvider,
         User,
         UserCredential,
-        Auth,
+        signInWithEmailAndPassword,
         createUserWithEmailAndPassword
  } from 'firebase/auth';
 
  import {getFirestore,doc,getDoc,setDoc, DocumentReference, DocumentData} from 'firebase/firestore'
-import { aw } from 'react-router/dist/development/register-BkDIKxVz';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyC5a8z_3RfTh-yxadcDtvQ6QE1ZYTUsWz4",
@@ -103,4 +103,33 @@ export const createAuthUserWithEmailAndPassword = async ({email, password}: IUse
       },
     };
    
+}
+
+export const signInAuthUserWithEmailAndPassword = async ({email, password}: IUserAuth):Promise<IAuthResult> =>{
+  if(!email || !password) return {
+      error: {
+        code: "auth/invalid-input",
+        message: "Email and password must be provided.",
+      }};
+  try {
+      const { user }  = await signInWithEmailAndPassword(auth ,email, password )
+      return { user };
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+          return{
+            error: {
+              code: error.code,
+              message: error.message
+            }
+          }
+      }
+    }
+    return {
+      error: {
+        code: "auth/unknown-error",
+        message: "An unknown error occurred.",
+      },
+    };
+  
+
 }

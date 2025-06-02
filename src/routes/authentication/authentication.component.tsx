@@ -1,16 +1,14 @@
-import { JSX, useEffect } from "react"
+import { JSX } from "react"
 import  { signInWithGooglePopup ,
           createUserDocumentFromAuth,
           signInWithGoogleRedirect,
           auth
      } from '../../utils/firebase/firebase.utils' 
 import { SignUpForm } from "../../components"
+import { SignInForm } from "../../components"
+import styles from './authentication.module.scss'
 
-
-
-
-
-export const SignIn = ():JSX.Element => {
+export const Authentication = ():JSX.Element => {
 
     const logGoogleUser = async () =>{
         try {
@@ -24,11 +22,13 @@ export const SignIn = ():JSX.Element => {
     
 
     return(
-        <div>
+        <div className={styles.authenticationContainer}>
             <h1>Sign in Page</h1>
             <button onClick={logGoogleUser}>sign in</button>
 
+
             <SignUpForm/>
+            <SignInForm/>
           
         </div>
     )

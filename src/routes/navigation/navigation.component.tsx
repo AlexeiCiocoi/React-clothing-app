@@ -15,7 +15,7 @@ export  const Navigation = (): JSX.Element =>{
                     <Link className={styles.navLink} to='/shop' >
                         Shop
                     </Link>
-                    <Link className={styles.navLink} to='/sign-in' >
+                    <Link className={styles.navLink} to='/auth' >
                         Sign in
                     </Link>
 
