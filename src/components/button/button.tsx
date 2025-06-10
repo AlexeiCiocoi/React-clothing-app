@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import styles from './button.module.css'
+import styles from './button.module.scss'
 import cn from 'classnames'
 import { BUTTON_TYPE_APPERENCE, ButtonProps } from "./button.props";
 

@@ -1,9 +1,10 @@
-import { JSX, useState } from "react";
+import { JSX, useContext, useState } from "react";
 import { ISignInFormFields } from "./signInForm.props";
 import { createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase.utils'
 import { FormInput } from "../formInput/formInput.component";
 import styles from './signInForm.module.scss'
 import { Button } from "../button/button";
+import { UserContext } from "../../context/user/user.context";
 
 const defaultFormFields: ISignInFormFields = {
     email:'',
@@ -14,6 +15,7 @@ export const SignInForm =(): JSX.Element=>{
 
     const [formFields, setFormFields] = useState<ISignInFormFields>(defaultFormFields);
     const { email,password} = formFields;
+   
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
         const { name, value} = event.target;
@@ -22,9 +24,8 @@ export const SignInForm =(): JSX.Element=>{
     }
     const signInWithGoogle = async () =>{
             try {
-                 const { user } = await signInWithGooglePopup();
-                 createUserDocumentFromAuth(user)
-                
+                await signInWithGooglePopup();
+                 
             } catch (error) {
                 console.log(error)
             }
@@ -34,9 +35,10 @@ export const SignInForm =(): JSX.Element=>{
         event.preventDefault();
 
         try {
-             const res = await signInAuthUserWithEmailAndPassword({email, password})
+             const {user} = await signInAuthUserWithEmailAndPassword({email, password})
             resetFormFields();
-            console.log('response',res)
+            if(!user) return
+         
 
         } catch (error) {
               console.log(error)
@@ -54,7 +56,7 @@ export const SignInForm =(): JSX.Element=>{
             
                 <FormInput label='Email' required type="email" onChange={handleChange} name='email' value={email} />
                 <FormInput label='Password'required type="password" onChange={handleChange} name='password' value={password} />
-            <div className="button-container">
+            <div className={styles.buttonContainer}>
                 <Button appearence="default" type="submit">Sign In</Button>
                 <Button appearence="google" type='button' onClick={signInWithGoogle}>Google Sign In</Button>
 
