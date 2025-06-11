@@ -1,0 +1,16 @@
+.checkoutContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    width: 100%;
+    
+}
+.checkoutDetails{
+    display: grid;
+    padding-bottom: 15px;
+    width: 980px;
+    grid-template-columns:  repeat(5 , 1fr);
+}
+
