@@ -1,17 +1,17 @@
-import { JSX, useContext } from "react"
+import { JSX } from "react"
 
 import styles from './product-card.module.scss'
 
 import { Button } from "../button/button"
-import { CartContext } from "../../context/cart/cart.context"
-
 import { IProductCardProps } from "./product-card.props"
+import { useAppDispatch } from "@/store/hooks"
+import { addItemToCart } from "@/features/cart/cart.slice"
 
 export const ProductCard = ({product}: IProductCardProps): JSX.Element =>{
-    const {id , name , price ,imageUrl} = product
-    const {addItemToCard} = useContext(CartContext)
+    const { name , price ,imageUrl} = product
+    const dispatch = useAppDispatch();
 
-    const addproductToCart = () => addItemToCard(product);
+    const addproductToCart = () => dispatch(addItemToCart(product));
 
 
     return (

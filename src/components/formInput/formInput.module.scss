@@ -1,5 +1,16 @@
 $sub-color: grey;
 $main-color: black;
+$error-color: rgb(241, 95, 95);
+
+@mixin inputShrinkText {
+    
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    transition: 300ms ease all;
+    left: 5px;
+}
 
 @mixin shrinkLabel {
   top: -14px;
@@ -37,15 +48,18 @@ $main-color: black;
     letter-spacing: 0.3em;
   }
 
+  .error {
+    @include inputShrinkText;
+    color: $error-color;
+    bottom: -20px;
+    font-size: 12px;
+
+  }
+
   .formInputLabel {
+    @include inputShrinkText;
     color: $sub-color;
-    font-size: 16px;
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 5px;
     top: 10px;
-    transition: 300ms ease all;
 
     &.shrink {
       @include shrinkLabel();

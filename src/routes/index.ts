@@ -1,3 +1,5 @@
 export { Authentication} from './authentication/authentication.component'
 export { Home} from './home/home.component'
 export { Navigation} from './navigation/navigation.component'
+export { CategoriesPreview } from './categories-preview/categories-preview.component'
+export { Category } from './category/category.component'

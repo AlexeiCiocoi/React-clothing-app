@@ -1,9 +1,5 @@
 import { JSX } from "react"
-import  { signInWithGooglePopup ,
-          createUserDocumentFromAuth,
-          signInWithGoogleRedirect,
-          auth
-     } from '../../utils/firebase/firebase.utils' 
+
 import { SignUpForm } from "../../components"
 import { SignInForm } from "../../components"
 import styles from './authentication.module.scss'
